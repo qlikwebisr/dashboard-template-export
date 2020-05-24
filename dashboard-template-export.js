@@ -66,12 +66,71 @@ require(["js/qlik"], function (qlik) {
 
 			//console.log('export_clicked: ' + objId); 
 
-			//create vizualization object
-			app.visualization.get(objId).then( function( vizModel ) { 
+			/*//create vizualization object
+			 app.visualization.get(objId).then( function( vizModel ) { 
 
 				exportData(vizModel);
 
-			});
+			}); */
+			
+			//create vizualization object, up to  4 apps (max number)
+			app.visualization.get(objId).then( (vizModel) => { 
+
+				exportData(vizModel);
+
+			}).catch((error) => {
+
+				if(app1) { //if exist app1
+
+					app1.visualization.get(objId).then( (vizModel1) => { 
+
+						exportData(vizModel1);
+
+					}).catch( (error2) => {
+
+						if(app2) { //if exist app2
+
+							app2.visualization.get(objId).then( (vizModel2) => { 
+
+								exportData(vizModel2);
+
+							}).catch((error3) => {
+
+								if(app3) { //if exist app3
+
+									app3.visualization.get(objId).then( (vizModel3) => { 
+		
+										exportData(vizModel3);
+		
+									}).catch((error4) => {
+		
+										console.log('visualization_error4',error4 );
+		
+									}); //}).catch((error3) => {
+		
+								} //if(app3) {
+
+							    console.log('visualization_error3',error3 );
+
+							}); //}).catch((error3) => {
+
+					    } //if(app2) {
+
+						console.log('visualization_error2',error2);
+
+			        }); //}).catch( (error2) => {
+
+
+					console.log('visualization_error1',error1);
+
+			    } //if(app1) {
+
+				console.log('visualization_error',error);
+
+			}); //}).catch((error) => {
+
+			//End of create vizualization object code , up to  4 apps (max number)
+
 
 			//second option
 			//https://community.qlik.com/t5/QlikView-Layout-Visualizations/Adding-quot-Export-Data-quot-to-DAR-Template/m-p/46999
